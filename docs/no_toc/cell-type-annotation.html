@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Cell type annotation | Statistics for Genomics: scRNAseq</title>
+  <meta name="description" content="Description about Course/Book." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Cell type annotation | Statistics for Genomics: scRNAseq" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Description about Course/Book." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Cell type annotation | Statistics for Genomics: scRNAseq" />
+  
+  <meta name="twitter:description" content="Description about Course/Book." />
+  
+
+
+
+<meta name="date" content="2024-08-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <link rel="shortcut icon" href="assets/GDSCN_style/gdscn_favicon.ico" type="image/x-icon" />
+<link rel="prev" href="marker-gene-detection.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="assets/style.css" type="text/css" />
+<link rel="stylesheet" href="assets/GDSCN_style/gdscn.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.gdscn.org/" target="_blank"><img src="assets/GDSCN_style/logo-gdscn.png" style="width: 80%; padding-left: 15px; padding-top: 8px;"</a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#skills-level"><i class="fa fa-check"></i>Skills Level</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#gdscn-collection"><i class="fa fa-check"></i>GDSCN Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>1</b> OVERVIEW</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="overview.html"><a href="overview.html#scope"><i class="fa fa-check"></i><b>1.1</b> Scope</a></li>
+<li class="chapter" data-level="1.2" data-path="overview.html"><a href="overview.html#bioconductor-reference-book"><i class="fa fa-check"></i><b>1.2</b> Bioconductor reference book</a></li>
+<li class="chapter" data-level="1.3" data-path="overview.html"><a href="overview.html#singlecellexperiment"><i class="fa fa-check"></i><b>1.3</b> SingleCellExperiment</a></li>
+<li class="chapter" data-level="1.4" data-path="overview.html"><a href="overview.html#obtaining-data"><i class="fa fa-check"></i><b>1.4</b> Obtaining Data</a></li>
+</ul></li>
+<li class="part"><span><b>DATA CLEANING</b></span></li>
+<li class="chapter" data-level="2" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html"><i class="fa fa-check"></i><b>2</b> Quality control of the library</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html#visualizing-distributions-of-diagnostic-metrics-and-identifying-low-quality-cells"><i class="fa fa-check"></i><b>2.1</b> Visualizing distributions of diagnostic metrics and identifying low-quality cells</a></li>
+<li class="chapter" data-level="2.2" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html#identifying-and-removing-low-quality-cells"><i class="fa fa-check"></i><b>2.2</b> Identifying and removing low-quality cells</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="normalization.html"><a href="normalization.html"><i class="fa fa-check"></i><b>3</b> Normalization</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="normalization.html"><a href="normalization.html#calculating-scaling-factors"><i class="fa fa-check"></i><b>3.1</b> Calculating scaling factors</a></li>
+<li class="chapter" data-level="3.2" data-path="normalization.html"><a href="normalization.html#applying-scaling-factors-and-computing-normalized-expression-values"><i class="fa fa-check"></i><b>3.2</b> Applying scaling factors and computing normalized expression values</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html"><i class="fa fa-check"></i><b>4</b> Choosing features for the analysis</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html#examining-per-gene-variation"><i class="fa fa-check"></i><b>4.1</b> Examining per-gene variation</a></li>
+<li class="chapter" data-level="4.2" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html#selecting-highly-variable-genes"><i class="fa fa-check"></i><b>4.2</b> Selecting highly variable genes</a></li>
+</ul></li>
+<li class="part"><span><b>CLUSTERING</b></span></li>
+<li class="chapter" data-level="5" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html"><i class="fa fa-check"></i><b>5</b> Dimensionality reduction</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html#calculating-and-choosing-pcs"><i class="fa fa-check"></i><b>5.1</b> Calculating and choosing PCs</a></li>
+<li class="chapter" data-level="5.2" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html#applying-non-linear-visualization-methods-to-pcs"><i class="fa fa-check"></i><b>5.2</b> Applying non-linear visualization methods to PCs</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>6</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="clustering.html"><a href="clustering.html#clustering-using-graph-based-methods"><i class="fa fa-check"></i><b>6.1</b> Clustering using graph-based methods</a></li>
+</ul></li>
+<li class="part"><span><b>ANNOTATION</b></span></li>
+<li class="chapter" data-level="7" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html"><i class="fa fa-check"></i><b>7</b> Marker gene detection</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html#calculating-and-ranking-effect-size-summary-statistics"><i class="fa fa-check"></i><b>7.1</b> Calculating and ranking effect size summary statistics</a></li>
+<li class="chapter" data-level="7.2" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html#comparing-gene-expression-levels-across-clusters"><i class="fa fa-check"></i><b>7.2</b> Comparing gene expression levels across clusters</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="cell-type-annotation.html"><a href="cell-type-annotation.html"><i class="fa fa-check"></i><b>8</b> Cell type annotation</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="cell-type-annotation.html"><a href="cell-type-annotation.html#annotating-cell-types"><i class="fa fa-check"></i><b>8.1</b> Annotating cell types</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="" data-path="about-the-authors.html"><a href="about-the-authors.html"><i class="fa fa-check"></i>About the Authors</a></li>
+<li class="divider"></li>
+<p style="text-align:center;"> <a href="https://github.com/jhudsl/OTTR_Template" target="blank" > This content was published with</a> <a href="https://bookdown.org/" target="blank"> bookdown by: </a> </p>
+<p style="text-align:center;"> <a href="http://jhudatascience.org/"> The Johns Hopkins Data Science Lab </a></p>
+<a href="http://jhudatascience.org/"><img src="https://jhudatascience.org/images/dasl.png" style=" width: 80%; padding-left: 40px; padding-top: 8px; vertical-align: top "</a>
+<p style="text-align:center; font-size: 12px;"> <a href="https://github.com/rstudio4edu/rstudio4edu-book/"> Style adapted from: rstudio4edu-book </a> <a href ="https://creativecommons.org/licenses/by/2.0/"> (CC-BY 2.0) </a></p>
+<p style="padding-left: 40px;"><div class="trapezoid" style = "padding-left: 40px;"><span><a href="https://docs.google.com/forms/d/e/1FAIpQLScrDVb_utm55pmb_SHx-RgELTEbCCWdLea0T3IzS0Oj00GE4w/viewform?usp=pp_url&entry.1565230805=Statistics+for+Genomics:+scRNAseq"> Click here to provide feedback</a> <img src="assets/itcr_arrow.png" style=" width: 10%" ></span></div></p>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics for Genomics: scRNAseq</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<head>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=10.0,initial-scale=1.0">
+  <!--script src="https://kit.fontawesome.com/6a26f47516.js"></script-->
+  <!--<script src="assets/hideOutput.js"></script>-->
+</head>
+
+
+
+<div class="hero-image-container">
+  <img class= "hero-image" src="assets/GDSCN_style/dasl_thin_main_image.png">
+</div>
+<div id="cell-type-annotation" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Cell type annotation</h1>
+<p>Unless you are already an expert in neuronal cell expression, you probably didn’t know <em>Gad1</em> and <em>Slc6a1</em> are known interneuron markers until you were told. Luckily, we have several high-quality references databases that can be used for annotating scRNA-seq datasets. Some of these references are useful for identifying cell types (the Zeisel dataset we have been using is a well-known reference for identifying neuronal cell types). Others, such as the Gene Ontology (GO) or Kyoto Encyclopedia of Genes and Genomes (KEGG) collections, are useful for identifying biological processes associated with each cluster.</p>
+<div id="annotating-cell-types" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Annotating cell types</h2>
+<p>There are three basic strategies for annotating datasets: match the expression profile of each individual cell to the expression profile of cells from a reference dataset (the reference dataset approach); identify sets of marker genes highly expressed in each cell and match to gene sets from known cell types (the gene set approach); or perform a gene-set enrichment analysis on the marker genes that define each cluster.</p>
+<p>The Zeisel dataset we have been working with has actually been annotated all this time.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="cell-type-annotation.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the top marker genes assigned to each cell type (level1class) in the Zeisel dataset</span></span>
+<span id="cb29-2"><a href="cell-type-annotation.html#cb29-2" aria-hidden="true" tabindex="-1"></a>wilcox.z <span class="ot">&lt;-</span> <span class="fu">pairwiseWilcox</span>(sce.zeisel.qc, sce.zeisel.qc<span class="sc">$</span>level1class, </span>
+<span id="cb29-3"><a href="cell-type-annotation.html#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lfc =</span> <span class="dv">1</span>, <span class="at">direction =</span> <span class="st">&quot;up&quot;</span>)</span>
+<span id="cb29-4"><a href="cell-type-annotation.html#cb29-4" aria-hidden="true" tabindex="-1"></a>markers.z <span class="ot">&lt;-</span> <span class="fu">getTopMarkers</span>(wilcox.z<span class="sc">$</span>statistics, wilcox.z<span class="sc">$</span>pairs,</span>
+<span id="cb29-5"><a href="cell-type-annotation.html#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pairwise =</span> <span class="cn">FALSE</span>, <span class="at">n =</span> <span class="dv">50</span>)</span>
+<span id="cb29-6"><a href="cell-type-annotation.html#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="cell-type-annotation.html#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># look at how many cell-type categories there are, as well as how many cells assigned to each category</span></span>
+<span id="cb29-8"><a href="cell-type-annotation.html#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lengths</span>(markers.z)</span></code></pre></div>
+<pre><code>## astrocytes_ependymal    endothelial-mural         interneurons 
+##                   78                   83                  119 
+##            microglia     oligodendrocytes        pyramidal CA1 
+##                   69                   80                  124 
+##         pyramidal SS 
+##                  147</code></pre>
+<p>This dataset has grouped the individual cells into 7 different categories of neuronal subtypes. We can use the gene sets that define these categories to annotate a second brain scRNA-seq dataset from Tasic et al. (2016). (We will not go through all the data cleaning and clustering steps for this new dataset - having made it this far, we trust you can do that!)</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="cell-type-annotation.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load the new dataset</span></span>
+<span id="cb31-2"><a href="cell-type-annotation.html#cb31-2" aria-hidden="true" tabindex="-1"></a>sce.tasic <span class="ot">&lt;-</span> <span class="fu">TasicBrainData</span>()</span></code></pre></div>
+<p>We first create the gene set lists using the <code>GSEABase</code> package. The <code>AUCell</code> package identifies and ranks marker sets highly expressed in each cell using an area under the curve (AUC) approach. We can assign cell type identity in the Tasic dataset by taking the marker set with the highest AUC as the label for the cell.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="cell-type-annotation.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AnVIL::install(&quot;GSEABase&quot;)</span></span>
+<span id="cb32-2"><a href="cell-type-annotation.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GSEABase)</span>
+<span id="cb32-3"><a href="cell-type-annotation.html#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="cell-type-annotation.html#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create a dataset that contains just the information about the Zeisel cell-type categories and the marker genes that define each cell-type</span></span>
+<span id="cb32-5"><a href="cell-type-annotation.html#cb32-5" aria-hidden="true" tabindex="-1"></a>all.sets <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">names</span>(markers.z), <span class="cf">function</span>(x) {</span>
+<span id="cb32-6"><a href="cell-type-annotation.html#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">GeneSet</span>(markers.z[[x]], <span class="at">setName =</span> x)        </span>
+<span id="cb32-7"><a href="cell-type-annotation.html#cb32-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb32-8"><a href="cell-type-annotation.html#cb32-8" aria-hidden="true" tabindex="-1"></a>all.sets <span class="ot">&lt;-</span> <span class="fu">GeneSetCollection</span>(all.sets)</span>
+<span id="cb32-9"><a href="cell-type-annotation.html#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="cell-type-annotation.html#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># AnVIL::install(&quot;AUCell&quot;)</span></span>
+<span id="cb32-11"><a href="cell-type-annotation.html#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AUCell)</span>
+<span id="cb32-12"><a href="cell-type-annotation.html#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="cell-type-annotation.html#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># rank genes by expression values within each cell</span></span>
+<span id="cb32-14"><a href="cell-type-annotation.html#cb32-14" aria-hidden="true" tabindex="-1"></a>rankings <span class="ot">&lt;-</span> <span class="fu">AUCell_buildRankings</span>(<span class="fu">counts</span>(sce.tasic),</span>
+<span id="cb32-15"><a href="cell-type-annotation.html#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plotStats =</span> <span class="cn">FALSE</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb32-16"><a href="cell-type-annotation.html#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="cell-type-annotation.html#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate AUC for each previously-defined marker set (from Zeisel) in the Tasic data</span></span>
+<span id="cb32-18"><a href="cell-type-annotation.html#cb32-18" aria-hidden="true" tabindex="-1"></a>cell.aucs <span class="ot">&lt;-</span> <span class="fu">AUCell_calcAUC</span>(all.sets, rankings)</span>
+<span id="cb32-19"><a href="cell-type-annotation.html#cb32-19" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">assay</span>(cell.aucs))</span></code></pre></div>
+<p>After assigning cell type identities to each cluster, a researcher should always verify that the identities make sense. Since the Tasic dataset has also been annotated, we can compare our annotation to the researcher-provided annotation as a sort of sanity check.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="cell-type-annotation.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign cell type identity in the Tasic dataset by assumig the marker set with the top AUC is the proper label</span></span>
+<span id="cb33-2"><a href="cell-type-annotation.html#cb33-2" aria-hidden="true" tabindex="-1"></a>new.labels <span class="ot">&lt;-</span> <span class="fu">colnames</span>(results)[<span class="fu">max.col</span>(results)]</span>
+<span id="cb33-3"><a href="cell-type-annotation.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="cell-type-annotation.html#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># compare our annotations to the annotations provided by the Tasic dataset</span></span>
+<span id="cb33-5"><a href="cell-type-annotation.html#cb33-5" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(new.labels, sce.tasic<span class="sc">$</span>broad_type)</span>
+<span id="cb33-6"><a href="cell-type-annotation.html#cb33-6" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
+<pre><code>##                       
+## new.labels             Astrocyte Endothelial Cell GABA-ergic Neuron
+##   astrocytes_ependymal        43                2                 0
+##   endothelial-mural            0               27                 0
+##   interneurons                 0                0               759
+##   microglia                    0                0                 0
+##   oligodendrocytes             0                0                 1
+##   pyramidal SS                 0                0                 1
+##                       
+## new.labels             Glutamatergic Neuron Microglia Oligodendrocyte
+##   astrocytes_ependymal                    0         0               0
+##   endothelial-mural                       0         0               0
+##   interneurons                            2         0               0
+##   microglia                               0        22               0
+##   oligodendrocytes                        0         0              38
+##   pyramidal SS                          810         0               0
+##                       
+## new.labels             Oligodendrocyte Precursor Cell Unclassified
+##   astrocytes_ependymal                             19            4
+##   endothelial-mural                                 0            2
+##   interneurons                                      0           15
+##   microglia                                         0            1
+##   oligodendrocytes                                  3            0
+##   pyramidal SS                                      0           60</code></pre>
+<p>As you can see, the labels applied by the researchers and by our annotation mostly match. (Pyramidal SS nerves are primarily glutamatergic, so although the categories are labeled differently, those two categories do indeed match!) The major exception is the oligodendrocyte precursor cells, which our annotation called astrocytes. However, this mismatch isn’t as concerning as you might think, once you know that both astrocytes and oligodendrocytes come from the same precursor cell lineage.</p>
+<div class="reflection">
+<p>QUESTION
+1. Should we be concerned when 1 or 2 cells are assigned a different cell type identity by our annotation than by the researchers? Why or why not?</p>
+</div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="cell-type-annotation.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.1.3 (2022-03-10)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.5 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] AUCell_1.16.0               GSEABase_1.56.0            
+##  [3] graph_1.72.0                annotate_1.72.0            
+##  [5] XML_3.99-0.9                AnnotationDbi_1.56.2       
+##  [7] pheatmap_1.0.12             BiocSingular_1.10.0        
+##  [9] scran_1.22.1                scater_1.22.0              
+## [11] ggplot2_3.3.5               scuttle_1.4.0              
+## [13] scRNAseq_2.8.0              SingleCellExperiment_1.16.0
+## [15] SummarizedExperiment_1.24.0 Biobase_2.54.0             
+## [17] GenomicRanges_1.46.1        GenomeInfoDb_1.30.1        
+## [19] IRanges_2.28.0              S4Vectors_0.32.4           
+## [21] BiocGenerics_0.40.0         MatrixGenerics_1.6.0       
+## [23] matrixStats_0.61.0         
+## 
+## loaded via a namespace (and not attached):
+##   [1] AnnotationHub_3.2.2           BiocFileCache_2.2.1          
+##   [3] igraph_1.3.1                  lazyeval_0.2.2               
+##   [5] BiocParallel_1.28.3           digest_0.6.29                
+##   [7] ensembldb_2.18.4              htmltools_0.5.2              
+##   [9] viridis_0.6.2                 fansi_1.0.3                  
+##  [11] magrittr_2.0.3                memoise_2.0.1                
+##  [13] ScaledMatrix_1.2.0            cluster_2.1.2                
+##  [15] limma_3.50.3                  tzdb_0.3.0                   
+##  [17] Biostrings_2.62.0             readr_2.1.2                  
+##  [19] R.utils_2.12.2                prettyunits_1.1.1            
+##  [21] colorspace_2.0-3              blob_1.2.3                   
+##  [23] rappdirs_0.3.3                ggrepel_0.9.1                
+##  [25] xfun_0.26                     dplyr_1.0.8                  
+##  [27] crayon_1.5.1                  RCurl_1.98-1.6               
+##  [29] jsonlite_1.8.0                glue_1.6.2                   
+##  [31] gtable_0.3.0                  zlibbioc_1.40.0              
+##  [33] XVector_0.34.0                DelayedArray_0.20.0          
+##  [35] scales_1.2.1                  edgeR_3.36.0                 
+##  [37] DBI_1.1.2                     Rcpp_1.0.8.3                 
+##  [39] viridisLite_0.4.0             xtable_1.8-4                 
+##  [41] progress_1.2.2                dqrng_0.3.0                  
+##  [43] bit_4.0.4                     rsvd_1.0.5                   
+##  [45] metapod_1.2.0                 httr_1.4.2                   
+##  [47] RColorBrewer_1.1-3            ellipsis_0.3.2               
+##  [49] R.methodsS3_1.8.1             farver_2.1.0                 
+##  [51] pkgconfig_2.0.3               sass_0.4.1                   
+##  [53] dbplyr_2.1.1                  locfit_1.5-9.5               
+##  [55] utf8_1.2.2                    tidyselect_1.1.2             
+##  [57] rlang_1.0.2                   later_1.3.0                  
+##  [59] munsell_0.5.0                 BiocVersion_3.14.0           
+##  [61] tools_4.1.3                   cachem_1.0.6                 
+##  [63] cli_3.2.0                     generics_0.1.2               
+##  [65] RSQLite_2.2.12                ExperimentHub_2.2.1          
+##  [67] evaluate_0.15                 stringr_1.4.0                
+##  [69] fastmap_1.1.0                 yaml_2.3.5                   
+##  [71] knitr_1.33                    bit64_4.0.5                  
+##  [73] fs_1.5.2                      purrr_0.3.4                  
+##  [75] KEGGREST_1.34.0               AnnotationFilter_1.18.0      
+##  [77] sparseMatrixStats_1.6.0       mime_0.12                    
+##  [79] R.oo_1.24.0                   xml2_1.3.3                   
+##  [81] biomaRt_2.50.3                compiler_4.1.3               
+##  [83] beeswarm_0.4.0                filelock_1.0.2               
+##  [85] curl_4.3.2                    png_0.1-7                    
+##  [87] interactiveDisplayBase_1.32.0 statmod_1.4.36               
+##  [89] tibble_3.1.6                  bslib_0.3.1                  
+##  [91] stringi_1.7.6                 highr_0.9                    
+##  [93] GenomicFeatures_1.46.5        lattice_0.20-45              
+##  [95] bluster_1.4.0                 ProtGenerics_1.26.0          
+##  [97] Matrix_1.4-0                  vctrs_0.4.1                  
+##  [99] pillar_1.7.0                  lifecycle_1.0.1              
+## [101] BiocManager_1.30.16           jquerylib_0.1.4              
+## [103] BiocNeighbors_1.12.0          data.table_1.14.2            
+## [105] bitops_1.0-7                  irlba_2.3.5                  
+## [107] httpuv_1.6.5                  rtracklayer_1.54.0           
+## [109] R6_2.5.1                      BiocIO_1.4.0                 
+## [111] bookdown_0.24                 promises_1.2.0.1             
+## [113] gridExtra_2.3                 vipor_0.4.5                  
+## [115] ottrpal_1.0.1                 assertthat_0.2.1             
+## [117] rjson_0.2.21                  withr_2.5.0                  
+## [119] GenomicAlignments_1.30.0      Rsamtools_2.10.0             
+## [121] GenomeInfoDbData_1.2.7        parallel_4.1.3               
+## [123] hms_1.1.1                     grid_4.1.3                   
+## [125] beachmat_2.10.0               rmarkdown_2.10               
+## [127] DelayedMatrixStats_1.16.0     Rtsne_0.16                   
+## [129] shiny_1.7.1                   ggbeeswarm_0.6.0             
+## [131] restfulr_0.0.13</code></pre>
+
+</div>
+</div>
+<hr>
+<center> 
+  <div class="footer">
+      All illustrations <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY. </a>
+      <br>
+      All other materials <a href= "https://creativecommons.org/licenses/by/4.0/"> CC-BY </a> unless noted otherwise.
+  </div>
+</center>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="marker-gene-detection.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

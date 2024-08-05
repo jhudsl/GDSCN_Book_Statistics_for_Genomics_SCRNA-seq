@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Clustering | Statistics for Genomics: scRNAseq</title>
+  <meta name="description" content="Description about Course/Book." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Clustering | Statistics for Genomics: scRNAseq" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Description about Course/Book." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Clustering | Statistics for Genomics: scRNAseq" />
+  
+  <meta name="twitter:description" content="Description about Course/Book." />
+  
+
+
+
+<meta name="date" content="2024-08-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <link rel="shortcut icon" href="assets/GDSCN_style/gdscn_favicon.ico" type="image/x-icon" />
+<link rel="prev" href="dimensionality-reduction.html"/>
+<link rel="next" href="marker-gene-detection.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="assets/style.css" type="text/css" />
+<link rel="stylesheet" href="assets/GDSCN_style/gdscn.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.gdscn.org/" target="_blank"><img src="assets/GDSCN_style/logo-gdscn.png" style="width: 80%; padding-left: 15px; padding-top: 8px;"</a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#skills-level"><i class="fa fa-check"></i>Skills Level</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#gdscn-collection"><i class="fa fa-check"></i>GDSCN Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>1</b> OVERVIEW</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="overview.html"><a href="overview.html#scope"><i class="fa fa-check"></i><b>1.1</b> Scope</a></li>
+<li class="chapter" data-level="1.2" data-path="overview.html"><a href="overview.html#bioconductor-reference-book"><i class="fa fa-check"></i><b>1.2</b> Bioconductor reference book</a></li>
+<li class="chapter" data-level="1.3" data-path="overview.html"><a href="overview.html#singlecellexperiment"><i class="fa fa-check"></i><b>1.3</b> SingleCellExperiment</a></li>
+<li class="chapter" data-level="1.4" data-path="overview.html"><a href="overview.html#obtaining-data"><i class="fa fa-check"></i><b>1.4</b> Obtaining Data</a></li>
+</ul></li>
+<li class="part"><span><b>DATA CLEANING</b></span></li>
+<li class="chapter" data-level="2" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html"><i class="fa fa-check"></i><b>2</b> Quality control of the library</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html#visualizing-distributions-of-diagnostic-metrics-and-identifying-low-quality-cells"><i class="fa fa-check"></i><b>2.1</b> Visualizing distributions of diagnostic metrics and identifying low-quality cells</a></li>
+<li class="chapter" data-level="2.2" data-path="quality-control-of-the-library.html"><a href="quality-control-of-the-library.html#identifying-and-removing-low-quality-cells"><i class="fa fa-check"></i><b>2.2</b> Identifying and removing low-quality cells</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="normalization.html"><a href="normalization.html"><i class="fa fa-check"></i><b>3</b> Normalization</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="normalization.html"><a href="normalization.html#calculating-scaling-factors"><i class="fa fa-check"></i><b>3.1</b> Calculating scaling factors</a></li>
+<li class="chapter" data-level="3.2" data-path="normalization.html"><a href="normalization.html#applying-scaling-factors-and-computing-normalized-expression-values"><i class="fa fa-check"></i><b>3.2</b> Applying scaling factors and computing normalized expression values</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html"><i class="fa fa-check"></i><b>4</b> Choosing features for the analysis</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html#examining-per-gene-variation"><i class="fa fa-check"></i><b>4.1</b> Examining per-gene variation</a></li>
+<li class="chapter" data-level="4.2" data-path="choosing-features-for-the-analysis.html"><a href="choosing-features-for-the-analysis.html#selecting-highly-variable-genes"><i class="fa fa-check"></i><b>4.2</b> Selecting highly variable genes</a></li>
+</ul></li>
+<li class="part"><span><b>CLUSTERING</b></span></li>
+<li class="chapter" data-level="5" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html"><i class="fa fa-check"></i><b>5</b> Dimensionality reduction</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html#calculating-and-choosing-pcs"><i class="fa fa-check"></i><b>5.1</b> Calculating and choosing PCs</a></li>
+<li class="chapter" data-level="5.2" data-path="dimensionality-reduction.html"><a href="dimensionality-reduction.html#applying-non-linear-visualization-methods-to-pcs"><i class="fa fa-check"></i><b>5.2</b> Applying non-linear visualization methods to PCs</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>6</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="clustering.html"><a href="clustering.html#clustering-using-graph-based-methods"><i class="fa fa-check"></i><b>6.1</b> Clustering using graph-based methods</a></li>
+</ul></li>
+<li class="part"><span><b>ANNOTATION</b></span></li>
+<li class="chapter" data-level="7" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html"><i class="fa fa-check"></i><b>7</b> Marker gene detection</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html#calculating-and-ranking-effect-size-summary-statistics"><i class="fa fa-check"></i><b>7.1</b> Calculating and ranking effect size summary statistics</a></li>
+<li class="chapter" data-level="7.2" data-path="marker-gene-detection.html"><a href="marker-gene-detection.html#comparing-gene-expression-levels-across-clusters"><i class="fa fa-check"></i><b>7.2</b> Comparing gene expression levels across clusters</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="cell-type-annotation.html"><a href="cell-type-annotation.html"><i class="fa fa-check"></i><b>8</b> Cell type annotation</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="cell-type-annotation.html"><a href="cell-type-annotation.html#annotating-cell-types"><i class="fa fa-check"></i><b>8.1</b> Annotating cell types</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="" data-path="about-the-authors.html"><a href="about-the-authors.html"><i class="fa fa-check"></i>About the Authors</a></li>
+<li class="divider"></li>
+<p style="text-align:center;"> <a href="https://github.com/jhudsl/OTTR_Template" target="blank" > This content was published with</a> <a href="https://bookdown.org/" target="blank"> bookdown by: </a> </p>
+<p style="text-align:center;"> <a href="http://jhudatascience.org/"> The Johns Hopkins Data Science Lab </a></p>
+<a href="http://jhudatascience.org/"><img src="https://jhudatascience.org/images/dasl.png" style=" width: 80%; padding-left: 40px; padding-top: 8px; vertical-align: top "</a>
+<p style="text-align:center; font-size: 12px;"> <a href="https://github.com/rstudio4edu/rstudio4edu-book/"> Style adapted from: rstudio4edu-book </a> <a href ="https://creativecommons.org/licenses/by/2.0/"> (CC-BY 2.0) </a></p>
+<p style="padding-left: 40px;"><div class="trapezoid" style = "padding-left: 40px;"><span><a href="https://docs.google.com/forms/d/e/1FAIpQLScrDVb_utm55pmb_SHx-RgELTEbCCWdLea0T3IzS0Oj00GE4w/viewform?usp=pp_url&entry.1565230805=Statistics+for+Genomics:+scRNAseq"> Click here to provide feedback</a> <img src="assets/itcr_arrow.png" style=" width: 10%" ></span></div></p>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics for Genomics: scRNAseq</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<head>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=10.0,initial-scale=1.0">
+  <!--script src="https://kit.fontawesome.com/6a26f47516.js"></script-->
+  <!--<script src="assets/hideOutput.js"></script>-->
+</head>
+
+
+
+<div class="hero-image-container">
+  <img class= "hero-image" src="assets/GDSCN_style/dasl_thin_main_image.png">
+</div>
+<div id="clustering" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Clustering</h1>
+<p>At its core, clustering is a tool that allows us to examine structure and patterns in our data. There isn’t really a “true” answer to how the data should be clustered. Instead, we can change the algorithms and parameters to explore a variety of possibilities that work best for each dataset and question the researcher is trying to answer.</p>
+<div id="clustering-using-graph-based-methods" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Clustering using graph-based methods</h2>
+<p>Graph-based clustering is based on identifying the nearest neighbors of each cell in high-dimensional space. The connections between a cell and its neighbors (called edges) are weighted based on the similarity of the two cells connected. An edge is assigned a higher weight if the two cells it connects are more closely related. After all cells have been connected to their neighbors, we apply an algorithm to identify clusters, or communities, of related cells. Each cell within a community will be more closely related to any cell within the same community than to cells outside the community.</p>
+<p>Graph-based clustering scales easily, because it only used a <em>k</em>-nearest neighbor search. These searches run more quickly than other methods (like hierarchical clustering). Unfortunately, no information is retained about relationships beyond the neighboring cells. This effect also means that clustering resolution depends on cell density.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="clustering.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let the R algorithm define and label our clusters</span></span>
+<span id="cb20-2"><a href="clustering.html#cb20-2" aria-hidden="true" tabindex="-1"></a>nn.clusters <span class="ot">&lt;-</span> <span class="fu">clusterCells</span>(sce.zeisel.tsne20, <span class="at">use.dimred=</span><span class="st">&quot;PCA&quot;</span>)</span>
+<span id="cb20-3"><a href="clustering.html#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="clustering.html#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this command tells us how many clusters were identified (the top row) and how many cells belong to each cluster (the bottom row)</span></span>
+<span id="cb20-5"><a href="clustering.html#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nn.clusters)</span></code></pre></div>
+<pre><code>## nn.clusters
+##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 
+## 284 147 107 195 604 166 475  62 119 256 221  67  53  28  32</code></pre>
+<p>We assigned the cluster assignments back into our <code>SingleCellExperiment</code> object as a factor in the column metadata, which allows us to visualize the cluster assignment on a t-SNE plot.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="clustering.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a t-SNE plot showing the identified clusters</span></span>
+<span id="cb22-2"><a href="clustering.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colLabels</span>(sce.zeisel.tsne20) <span class="ot">&lt;-</span> nn.clusters</span>
+<span id="cb22-3"><a href="clustering.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plotReducedDim</span>(sce.zeisel.tsne20, <span class="st">&quot;TSNE&quot;</span>, <span class="at">colour_by=</span><span class="st">&quot;label&quot;</span>)</span></code></pre></div>
+<p><img src="07-clustering_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="reflection">
+<p>QUESTIONS
+1. How many clusters were identified using graph-based clustering? Which cluster contained the most cells, and how many cells did it have?</p>
+</div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="clustering.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.1.3 (2022-03-10)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.5 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] uwot_0.1.11                 Matrix_1.4-0               
+##  [3] BiocSingular_1.10.0         scran_1.22.1               
+##  [5] scater_1.22.0               ggplot2_3.3.5              
+##  [7] scuttle_1.4.0               scRNAseq_2.8.0             
+##  [9] SingleCellExperiment_1.16.0 SummarizedExperiment_1.24.0
+## [11] Biobase_2.54.0              GenomicRanges_1.46.1       
+## [13] GenomeInfoDb_1.30.1         IRanges_2.28.0             
+## [15] S4Vectors_0.32.4            BiocGenerics_0.40.0        
+## [17] MatrixGenerics_1.6.0        matrixStats_0.61.0         
+## 
+## loaded via a namespace (and not attached):
+##   [1] AnnotationHub_3.2.2           BiocFileCache_2.2.1          
+##   [3] igraph_1.3.1                  lazyeval_0.2.2               
+##   [5] BiocParallel_1.28.3           digest_0.6.29                
+##   [7] ensembldb_2.18.4              htmltools_0.5.2              
+##   [9] viridis_0.6.2                 fansi_1.0.3                  
+##  [11] magrittr_2.0.3                memoise_2.0.1                
+##  [13] ScaledMatrix_1.2.0            cluster_2.1.2                
+##  [15] limma_3.50.3                  tzdb_0.3.0                   
+##  [17] Biostrings_2.62.0             readr_2.1.2                  
+##  [19] prettyunits_1.1.1             colorspace_2.0-3             
+##  [21] blob_1.2.3                    rappdirs_0.3.3               
+##  [23] ggrepel_0.9.1                 xfun_0.26                    
+##  [25] dplyr_1.0.8                   crayon_1.5.1                 
+##  [27] RCurl_1.98-1.6                jsonlite_1.8.0               
+##  [29] glue_1.6.2                    gtable_0.3.0                 
+##  [31] zlibbioc_1.40.0               XVector_0.34.0               
+##  [33] DelayedArray_0.20.0           scales_1.2.1                 
+##  [35] edgeR_3.36.0                  DBI_1.1.2                    
+##  [37] Rcpp_1.0.8.3                  viridisLite_0.4.0            
+##  [39] xtable_1.8-4                  progress_1.2.2               
+##  [41] dqrng_0.3.0                   bit_4.0.4                    
+##  [43] rsvd_1.0.5                    metapod_1.2.0                
+##  [45] httr_1.4.2                    FNN_1.1.3                    
+##  [47] ellipsis_0.3.2                farver_2.1.0                 
+##  [49] pkgconfig_2.0.3               XML_3.99-0.9                 
+##  [51] sass_0.4.1                    dbplyr_2.1.1                 
+##  [53] locfit_1.5-9.5                utf8_1.2.2                   
+##  [55] labeling_0.4.2                tidyselect_1.1.2             
+##  [57] rlang_1.0.2                   later_1.3.0                  
+##  [59] AnnotationDbi_1.56.2          munsell_0.5.0                
+##  [61] BiocVersion_3.14.0            tools_4.1.3                  
+##  [63] cachem_1.0.6                  cli_3.2.0                    
+##  [65] generics_0.1.2                RSQLite_2.2.12               
+##  [67] ExperimentHub_2.2.1           evaluate_0.15                
+##  [69] stringr_1.4.0                 fastmap_1.1.0                
+##  [71] yaml_2.3.5                    knitr_1.33                   
+##  [73] bit64_4.0.5                   fs_1.5.2                     
+##  [75] purrr_0.3.4                   KEGGREST_1.34.0              
+##  [77] AnnotationFilter_1.18.0       sparseMatrixStats_1.6.0      
+##  [79] mime_0.12                     xml2_1.3.3                   
+##  [81] biomaRt_2.50.3                compiler_4.1.3               
+##  [83] beeswarm_0.4.0                filelock_1.0.2               
+##  [85] curl_4.3.2                    png_0.1-7                    
+##  [87] interactiveDisplayBase_1.32.0 statmod_1.4.36               
+##  [89] tibble_3.1.6                  bslib_0.3.1                  
+##  [91] stringi_1.7.6                 highr_0.9                    
+##  [93] RSpectra_0.16-0               GenomicFeatures_1.46.5       
+##  [95] lattice_0.20-45               bluster_1.4.0                
+##  [97] ProtGenerics_1.26.0           vctrs_0.4.1                  
+##  [99] pillar_1.7.0                  lifecycle_1.0.1              
+## [101] BiocManager_1.30.16           jquerylib_0.1.4              
+## [103] BiocNeighbors_1.12.0          bitops_1.0-7                 
+## [105] irlba_2.3.5                   httpuv_1.6.5                 
+## [107] rtracklayer_1.54.0            R6_2.5.1                     
+## [109] BiocIO_1.4.0                  bookdown_0.24                
+## [111] promises_1.2.0.1              gridExtra_2.3                
+## [113] vipor_0.4.5                   ottrpal_1.0.1                
+## [115] assertthat_0.2.1              rjson_0.2.21                 
+## [117] withr_2.5.0                   GenomicAlignments_1.30.0     
+## [119] Rsamtools_2.10.0              GenomeInfoDbData_1.2.7       
+## [121] parallel_4.1.3                hms_1.1.1                    
+## [123] grid_4.1.3                    beachmat_2.10.0              
+## [125] rmarkdown_2.10                DelayedMatrixStats_1.16.0    
+## [127] Rtsne_0.16                    shiny_1.7.1                  
+## [129] ggbeeswarm_0.6.0              restfulr_0.0.13</code></pre>
+
+</div>
+</div>
+
+
+
+<hr>
+<center> 
+  <div class="footer">
+      All illustrations <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY. </a>
+      <br>
+      All other materials <a href= "https://creativecommons.org/licenses/by/4.0/"> CC-BY </a> unless noted otherwise.
+  </div>
+</center>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="dimensionality-reduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="marker-gene-detection.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
